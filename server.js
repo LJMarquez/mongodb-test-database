@@ -6,7 +6,10 @@ const app = express();
 const port = process.env.PORT || 3000;
 const uri = process.env.MONGO_URI;
 
-const client = new MongoClient(uri);
+const client = new MongoClient(uri, {
+    tls: true,
+    tlsInsecure: false,
+});
 
 app.use(express.json());
 
@@ -16,7 +19,7 @@ async function startServer() {
         await client.connect();
         console.log("Connected to MongoDB");
 
-        app.listen(port, () => {
+        app.listen(port, '0.0.0.0', () => {
             console.log(`Server running at http://localhost:${port}`);
         });
     } catch (err) {
